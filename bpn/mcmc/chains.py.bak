@@ -13,13 +13,13 @@
 import math
 import random
 
-from . import recorders
-from . import states
+import recorders
+import states
 
 import logging
 logger = logging.getLogger('bpn.mcmcbpn.chains')
 
-from .defaults import (NUM_STEPS, BURN_IN, TRANSITION_TYPE_RATIO,
+from defaults import (NUM_STEPS, BURN_IN, TRANSITION_TYPE_RATIO,
         BROADCAST_PERCENT, SUPERDEBUG, SUPERDEBUG_MODE)
 
 
@@ -236,7 +236,7 @@ class PLNMarkovChain(MarkovChain):
         logger.info("Beginning burn-in of %d steps." %
                 self.burn_in_steps)
         broadcast_percent_complete = 0
-        for i in range(self.burn_in_steps):
+        for i in xrange(self.burn_in_steps):
             logger.debug("Burn-in step %d of %d" % (i + 1,
                     self.burn_in_steps))
             self.next_state()
@@ -251,7 +251,7 @@ class PLNMarkovChain(MarkovChain):
         logger.info("Beginning run of %d steps." % self.num_steps)
         self.burn_in_period = False
         broadcast_percent_complete = 0
-        for i in range(self.num_steps):
+        for i in xrange(self.num_steps):
             self.current_step = i
             logger.debug("Step %d of %d" % (i + 1, self.num_steps))
             self.next_state()

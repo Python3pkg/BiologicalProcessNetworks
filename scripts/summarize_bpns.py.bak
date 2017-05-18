@@ -835,9 +835,9 @@ def calc_interaction_link_tallies(
     # Also compute the percents relative to all interactions, regardless
     # of whether they are explained, in percent_tallies.
     percent_tallies = {}
-    for category, tallies in list(links_per_interaction.items()):
+    for category, tallies in links_per_interaction.items():
         category_percents = {}
-        for tally, num_interactions in list(tallies.items()):
+        for tally, num_interactions in tallies.items():
             if tally > 0:
                 total_explained[category] += num_interactions
             category_percents[tally] = (float(num_interactions) /
@@ -848,9 +848,9 @@ def calc_interaction_link_tallies(
     # Now go back and calculate the explained percents.
     total_explained = dict(total_explained)
     explained_percent_tallies = {}
-    for category, tallies in list(links_per_interaction.items()):
+    for category, tallies in links_per_interaction.items():
         category_explained_percents = {}
-        for tally, num_interactions in list(tallies.items()):
+        for tally, num_interactions in tallies.items():
             if tally == 0:
                 category_explained_percents[tally] = 0
             else:
@@ -872,7 +872,7 @@ def calc_interaction_link_tallies(
 
 def write_interaction_link_tallies(csvwriter, links_per_interaction):
     outrecords = []
-    tallies = list(links_per_interaction['all'].keys())
+    tallies = links_per_interaction['all'].keys()
     tallies.sort()
     if 'active' in links_per_interaction:
         fields = INTERACTION_TALLIES_EXPR_FIELDNAMES[1:]
@@ -890,7 +890,7 @@ def write_interaction_link_tallies(csvwriter, links_per_interaction):
 
 def calc_interaction_links_tallies_means_and_stddevs(
         interaction_link_tallies_per_file):
-    tallies = list(interaction_link_tallies_per_file[0]['all'].keys())
+    tallies = interaction_link_tallies_per_file[0]['all'].keys()
     tallies.sort()
     fields = ['all_percent', 'all_percent_explained']
     if 'active' in interaction_link_tallies_per_file[tallies[0]]:
@@ -915,9 +915,9 @@ def calc_interaction_links_tallies_means_and_stddevs(
                 )
                 collected_tallies[tally_value][field].append(value)
     tallies_means_and_stddevs = {}
-    for tally_value, tally_data in list(collected_tallies.items()):
+    for tally_value, tally_data in collected_tallies.items():
         tally_means_and_stddevs = {}
-        for category, category_data in list(tally_data.items()):
+        for category, category_data in tally_data.items():
             category_data = numpy.array(category_data)
             tally_means_and_stddevs[category] = (
                     category_data.mean(),
@@ -931,12 +931,12 @@ def calc_interaction_links_tallies_means_and_stddevs(
 def write_interaction_links_tallies_means_and_stddevs(csvwriter,
         tallies_means_and_stddevs):
     outrecords = []
-    tallies = list(tallies_means_and_stddevs.keys())
+    tallies = tallies_means_and_stddevs.keys()
     tallies.sort()
     for tally in tallies:
         record = {'links_per_interaction': tally}
         for category, (mean_value, stddev_value) in (
-                list(tallies_means_and_stddevs[tally].items())):
+                tallies_means_and_stddevs[tally].items()):
             record['{0}_mean'.format(category)] = mean_value
             record['{0}_stddev'.format(category)] = stddev_value
         outrecords.append(record)
@@ -1083,7 +1083,7 @@ def calc_overlap_between_links(
                 active_interactions_statistics
 
         inactive_interactions_statistics = {}
-        for key, value in list(all_interactions_statistics.items()):
+        for key, value in all_interactions_statistics.items():
             active_value = active_interactions_statistics[key]
             inactive_interactions_statistics[key] = value - active_value
         # the jaccard calculation is incorrect from the above; compute
@@ -1182,7 +1182,7 @@ def calc_within_file_overlaps(
 def write_file_links_statistics(csvwriter, links_statistics):
     """output the overlap statistics of a single collection of links."""
     outrecords = []
-    for links, stats in list(links_statistics.items()):
+    for links, stats in links_statistics.items():
         outrecord = {
                 'link1': '--'.join(links[0]),
                 'link2': '--'.join(links[1]),
@@ -1215,7 +1215,7 @@ def summarize_jaccards(stats):
             'active': [],
             'inactive': []
     }
-    for link_stats in list(stats.values()):
+    for link_stats in stats.values():
         summary['all'].append(link_stats['all']['jaccard'])
         if 'active' in link_stats:
             summary['active'].append(link_stats['active']['jaccard'])
@@ -1230,7 +1230,7 @@ def summarize_jaccards(stats):
 def max_jaccards(stats):
     link_stats_dict = collections.defaultdict(lambda:
             collections.defaultdict(float))
-    for links, overlap_stats in list(stats.items()):
+    for links, overlap_stats in stats.items():
         all_jaccard = overlap_stats['all']['jaccard']
         if 'active' in overlap_stats:
             active_jaccard = overlap_stats['active']['jaccard']
@@ -1244,7 +1244,7 @@ def max_jaccards(stats):
                 if link_stats_dict[link]['inactive'] < inactive_jaccard:
                     link_stats_dict[link]['inactive'] = inactive_jaccard
     links_max_jaccards = collections.defaultdict(list)
-    for link, jaccards in list(link_stats_dict.items()):
+    for link, jaccards in link_stats_dict.items():
         links_max_jaccards['all'].append(jaccards['all'])
         if 'active' in jaccards:
             links_max_jaccards['active'].append(jaccards['active'])
@@ -1528,7 +1528,7 @@ def make_file_overlaps_output_paths(
             )
     )
     if activity_threshold is not None:
-        for outfile_type, outfile_path in list(output_paths.items()):
+        for outfile_type, outfile_path in output_paths.items():
             output_paths[outfile_type] = (
                     convutils.append_to_file_base_name(
                         outfile_path,
@@ -1540,7 +1540,7 @@ def make_file_overlaps_output_paths(
 
 
 def write_all_within_file_statistics(input_data, all_overlap_data):
-    for links_file_name, file_statistics in list(all_overlap_data.items()):
+    for links_file_name, file_statistics in all_overlap_data.items():
         output_paths = make_file_overlaps_output_paths(
                 links_file_name,
                 input_data.output_dir,
@@ -1618,7 +1618,7 @@ def plot_within_overlaps_histograms(input_data, all_overlap_data):
     percents_by_file = {}
     max_percents_by_file = {}
     bins = None
-    for links_file_name, overlap_data in list(all_overlap_data.items()):
+    for links_file_name, overlap_data in all_overlap_data.items():
         output_paths = make_file_overlaps_output_paths(
                 links_file_name,
                 input_data.output_dir,
@@ -1627,7 +1627,7 @@ def plot_within_overlaps_histograms(input_data, all_overlap_data):
         )
         file_percents = {}
         file_max_percents = {}
-        for overlap_type, type_overlaps in list(overlap_data.items()):
+        for overlap_type, type_overlaps in overlap_data.items():
             if overlap_type == 'interaction_link_tallies':
                 continue
             summarized_type_overlaps = summarize_jaccards(
@@ -1675,7 +1675,7 @@ def build_summary_dict(percents_by_file, activity=False):
     # should themselves be dictionaries, with the keys being 'all',
     # 'active', and 'inactive', or just 'all', if there's no expression
     # data.
-    overlap_data_keys = list(percents_by_file[list(percents_by_file.keys())[0]].keys())
+    overlap_data_keys = percents_by_file[percents_by_file.keys()[0]].keys()
     if activity:
         ldict = lambda: {
                 'all': [],
@@ -1688,9 +1688,9 @@ def build_summary_dict(percents_by_file, activity=False):
             overlap_data_keys)
 
     # First, gather up all the relevant data.
-    for links_file_name, file_data in list(percents_by_file.items()):
-        for overlap_type, overlap_data in list(file_data.items()):
-            for activity_class, measurement in list(overlap_data.items()):
+    for links_file_name, file_data in percents_by_file.items():
+        for overlap_type, overlap_data in file_data.items():
+            for activity_class, measurement in overlap_data.items():
                 overlap_summaries_data[overlap_type][activity_class].append(
                         measurement)
     return overlap_summaries_data
@@ -1702,7 +1702,7 @@ def file_percents_to_means_and_stddevs(
     ):
     file_summaries = build_summary_dict(percents_by_file, activity)
     file_means_and_stddevs = {}
-    for overlap_type, type_summaries in list(file_summaries.items()):
+    for overlap_type, type_summaries in file_summaries.items():
         if overlap_type == 'interaction_link_tallies':
             continue
         all_percents = type_summaries['all']
@@ -1738,7 +1738,7 @@ def write_means_and_stddevs(
             input_data.activity_threshold,
             summary=True
     )
-    for overlap_type, overlap_means_and_stddevs in list(file_means_and_stddevs.items()):
+    for overlap_type, overlap_means_and_stddevs in file_means_and_stddevs.items():
         outfile_base, outfile_ext = os.path.splitext(
                 summary_output_paths[overlap_type])
         summary_outfile_name = outfile_base + '.tsv'
@@ -1800,7 +1800,7 @@ def plot_within_overlaps_summary_histograms(
             input_data.activity_threshold,
             summary=True
     )
-    for overlap_type, overlap_means_and_stddevs in list(file_means_and_stddevs.items()):
+    for overlap_type, overlap_means_and_stddevs in file_means_and_stddevs.items():
         outfile_base, outfile_ext = os.path.splitext(
                 summary_output_paths[overlap_type])
         histfile_names = ['{0}.{1}'.format(outfile_base, extension)
@@ -1958,7 +1958,7 @@ def calc_all_between_file_overlaps(
     ):
     all_overlap_statistics = {}
     # For every combination of files, do the comparison.
-    fcombos = list(itertools.combinations(list(range(len(significant_links))),
+    fcombos = list(itertools.combinations(range(len(significant_links)),
         2))
     # TODO: HACK HACK HACK HACK
     # If there's only one file, we still perform this, because we use
@@ -1968,7 +1968,7 @@ def calc_all_between_file_overlaps(
         fcombos = [(0, 0)]
     for i, j in fcombos:
         links_files_names = tuple([input_data.links_files[x].name for x
-                in (i, j)])
+                in i, j])
         logger.info("Comparing interaction overlaps between {0} and "
                 "{1}.".format(*links_files_names))
         significant_links_i = significant_links[i]
@@ -2056,7 +2056,7 @@ def summarize_btwn_jaccards(file_names, btwn_stats):
     # command line, rather than sorting the names in the keys. This way
     # the user will know which square indicates which two files were
     # being compared.
-    for (i, j) in itertools.combinations(list(range(num_files)), 2):
+    for (i, j) in itertools.combinations(range(num_files), 2):
         overlap_stats = btwn_stats[file_names[i], file_names[j]]
         summary['all'][i,j] = overlap_stats['all']['jaccard']
         if 'active' in overlap_stats:
@@ -2067,7 +2067,7 @@ def summarize_btwn_jaccards(file_names, btwn_stats):
         del summary['active']
         del summary['inactive']
     # Set all the self-comparisons to 1
-    for s in list(summary.values()):
+    for s in summary.values():
         for i in range(num_files):
             s[i,i] = 1
     return summary
@@ -2148,7 +2148,7 @@ def collect_bpn_statistics(
     ):
     all_bpn_statistics = {}
     for compared_files, comparison_statistics in (
-            list(btwn_bpns_comparison_data.items())):
+            btwn_bpns_comparison_data.items()):
         for i, file_name in enumerate(compared_files):
             if file_name in all_bpn_statistics:
                 continue
@@ -2173,7 +2173,7 @@ def write_bpn_stats(csv_writer, file_names, all_bpn_statistics):
     outrecords = []
     for file_name in file_names:
         record = {'file': file_name}
-        for field, value in list(all_bpn_statistics[file_name].items()):
+        for field, value in all_bpn_statistics[file_name].items():
             record[field] = value
         outrecords.append(record)
     csv_writer.writerows(outrecords)
@@ -2181,11 +2181,11 @@ def write_bpn_stats(csv_writer, file_names, all_bpn_statistics):
 
 def calc_bpn_stats_means_and_stddevs(all_bpn_statistics):
     collected_fields = collections.defaultdict(list)
-    for bpn_stats in list(all_bpn_statistics.values()):
-        for field, value in list(bpn_stats.items()):
+    for bpn_stats in all_bpn_statistics.values():
+        for field, value in bpn_stats.items():
             collected_fields[field].append(value)
     means_and_stddevs = {}
-    for field, values in list(collected_fields.items()):
+    for field, values in collected_fields.items():
         a = numpy.array(values, dtype='float64')
         mean = a.mean()
         stddev = a.std()
@@ -2196,7 +2196,7 @@ def calc_bpn_stats_means_and_stddevs(all_bpn_statistics):
 def write_bpn_stats_means_and_stddevs(csv_writer,
         bpn_means_and_stddevs):
     out_record = {}
-    for field, (mean, stddev) in list(bpn_means_and_stddevs.items()):
+    for field, (mean, stddev) in bpn_means_and_stddevs.items():
         out_record['{0}_mean'.format(field)] = mean
         out_record['{0}_stddev'.format(field)] = stddev
     csv_writer.writerow(out_record)
@@ -2209,7 +2209,7 @@ def calc_all_name_overlap_statistics(
     ):
     all_name_overlap_statistics = {}
     # For every combination of files, do the comparison.
-    fcombos = itertools.combinations(list(range(len(links_files_names))), 2)
+    fcombos = itertools.combinations(range(len(links_files_names)), 2)
     for (i, j) in fcombos:
         files = tuple([links_files_names[x] for x
                 in (i, j)])
@@ -2233,14 +2233,14 @@ def calc_all_name_overlap_statistics(
 def write_name_overlap_statistics(csv_writer, links_files_names,
         all_name_overlap_statistics):
     outrecords = []
-    fcombos = itertools.combinations(list(range(len(links_files_names))), 2)
+    fcombos = itertools.combinations(range(len(links_files_names)), 2)
     for (i, j) in fcombos:
         file1, file2 = tuple([links_files_names[x] for x
                 in (i, j)])
         overlap_data = all_name_overlap_statistics[(file1, file2)]
         record = {'file1': file1, 'file2': file2}
-        for name_type, name_data in list(overlap_data.items()):
-            for key, value in list(name_data.items()):
+        for name_type, name_data in overlap_data.items():
+            for key, value in name_data.items():
                 record_key = NAME_OVERLAPS_KEY_MAP[name_type][key]
                 record[record_key] = value
         outrecords.append(record)
@@ -2250,7 +2250,7 @@ def write_name_overlap_statistics(csv_writer, links_files_names,
 def calc_name_overlap_means_and_stddevs(all_name_overlap_statistics):
     links_jaccards = []
     terms_jaccards = []
-    for overlap_data in list(all_name_overlap_statistics.values()):
+    for overlap_data in all_name_overlap_statistics.values():
         links_jaccards.append(overlap_data['links']['jaccard'])
         terms_jaccards.append(overlap_data['terms']['jaccard'])
     links_jaccards_array = numpy.array(links_jaccards)
@@ -2366,7 +2366,7 @@ def main(argv=None):
     # Summarize the links-per-interaction tallies.
     links_per_interaction_per_file = [
             stats['interaction_link_tallies'] for stats in
-            list(within_overlap_statistics.values())
+            within_overlap_statistics.values()
     ]
     links_per_interaction_means_and_stddevs = (
             calc_interaction_links_tallies_means_and_stddevs(

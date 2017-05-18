@@ -24,7 +24,7 @@ import networkx
 
 import bpn.cli
 import bpn.structures
-from .defaults import (
+from defaults import (
         SUPERDEBUG,
         SUPERDEBUG_MODE,
         LINKS_FIELDNAMES,
@@ -47,9 +47,9 @@ if SUPERDEBUG_MODE:
     logger.setLevel(SUPERDEBUG)
     #stream_handler.setLevel(SUPERDEBUG)
 
-from . import chains
-from . import states
-from . import recorders
+import chains
+import states
+import recorders
 
 
 def create_seed_value():
@@ -65,10 +65,10 @@ def create_seed_value():
     from binascii import hexlify as _hexlify
     from os import urandom as _urandom
     try:
-        seed = int(_hexlify(_urandom(16)), 16)
+        seed = long(_hexlify(_urandom(16)), 16)
     except NotImplementedError:
         import time
-        seed = int(time.time() * 256) # use fractional seconds
+        seed = long(time.time() * 256) # use fractional seconds
     return seed
 
 

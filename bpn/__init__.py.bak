@@ -7,11 +7,11 @@
 # LICENSE.txt for details.
 
 
-from . import bpln
-from . import cbpn
-from . import cli
-from . import logconf
-from . import parsers
-from . import statstools
-from . import structures
-from . import mcmc
+import bpln
+import cbpn
+import cli
+import logconf
+import parsers
+import statstools
+import structures
+import mcmc

@@ -24,7 +24,7 @@ import bpn.structures
 import logging
 logger = logging.getLogger('bpn.mcmcbpn.states')
 
-from .defaults import SUPERDEBUG, SUPERDEBUG_MODE
+from defaults import SUPERDEBUG, SUPERDEBUG_MODE
 
 
 class ParameterNotInDistributionError(ValueError):
@@ -250,7 +250,7 @@ class PLNParametersState(State):
         num_neighbors_per_parameter = {}
         neighboring_indices = (
                 self._get_all_parameter_neighboring_indices())
-        for param_name, indices in list(neighboring_indices.items()):
+        for param_name, indices in neighboring_indices.items():
             num_neighbors_per_parameter[param_name] = len(indices)
         return num_neighbors_per_parameter
 

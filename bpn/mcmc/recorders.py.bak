@@ -10,14 +10,14 @@
 """State recorders for BPN states."""
 
 import collections
-from . import chains
+import chains
 import numpy
 
 import logging
 logger = logging.getLogger('bpn.mcmcbpn.recorders')
 
 from bpn import structures
-from .defaults import (SUPERDEBUG, SUPERDEBUG_MODE, OUTPUT_BUFFER_SIZE,
+from defaults import (SUPERDEBUG, SUPERDEBUG_MODE, OUTPUT_BUFFER_SIZE,
         TRANSITIONS_BUFFER_SIZE)
 
 
@@ -448,7 +448,7 @@ class PLNStateRecorder(StateRecorder):
         output_records = []
 
         for i, link_tally in enumerate(
-                iter(self.selected_links_tallies.items())):
+                self.selected_links_tallies.iteritems()):
             term1, term2 = link_tally[0]
             link_selection_count = link_tally[1]
             link_probability = link_selection_count / num_total_steps
@@ -474,11 +474,11 @@ class PLNStateRecorder(StateRecorder):
         """Output the final probabilities for the parameters."""
         num_total_steps = float(self.records_made)
         output_records = []
-        param_names = list(self.parameter_tallies.keys())
+        param_names = self.parameter_tallies.keys()
         param_names.sort()
         for param_name in param_names:
             distribution = self.parameter_tallies[param_name]
-            param_values = list(distribution.keys())
+            param_values = distribution.keys()
             param_values.sort()
             for param_value in param_values:
                 value_probability = (distribution[param_value] /
@@ -772,8 +772,8 @@ class TermsBasedStateRecorder(ArrayStateRecorder):
         # This gives the pairwise ``(term1_index, term2_index)`` indices
         # of any links which were marked as selected 1 or more times
         # throughout all recorded steps of the Markov chain.
-        selected_links_indices = list(zip(
-                *numpy.triu(self.selected_links_tallies).nonzero()))
+        selected_links_indices = zip(
+                *numpy.triu(self.selected_links_tallies).nonzero())
 
         for i, index in enumerate(selected_links_indices):
             # Get the actual terms from the indices.
@@ -1036,7 +1036,7 @@ class FrequencyDetailedArrayStateRecorder(DetailedArrayStateRecorder):
         "frequency_proportion\tarrival_frequency\t"
         "arrival_frequency_proportion\n")
 
-        for state_key in self.state_frequencies.keys():
+        for state_key in self.state_frequencies.iterkeys():
             log_likelihood, frequency = self.state_frequencies[state_key]
             arrival_frequency = self.state_arrival_frequencies[state_key]
             record = {

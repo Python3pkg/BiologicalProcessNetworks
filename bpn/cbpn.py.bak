@@ -48,7 +48,7 @@ import random
 
 from convutils import convutils
 
-from . import cli
+import cli
 
 # Configure all the logging stuff
 import logging
@@ -92,7 +92,7 @@ def _calculate_mean_expression_value(interactions_graph):
 
     """
     weights = [value['weight'] for value in
-            interactions_graph.node.values()]
+            interactions_graph.node.itervalues()]
     mean_expression_value = sum(weights) / len(weights)
     return mean_expression_value
 
@@ -157,7 +157,7 @@ def calculate_node_z_prime(
         max_z_score = max(neighbor_z_scores)
     # max() throws a ValueError if its argument has no elements; in this
     # case, we need to set the max_z_score to zero
-    except ValueError as e:
+    except ValueError, e:
         # Check to make certain max() raised this error
         if 'max()' in e.args[0]:
             max_z_score = 0
@@ -174,7 +174,7 @@ def calculate_node_z_prime(
         ]
         try:
             max_edge_weight = max(edge_weights)
-        except ValueError as e:
+        except ValueError, e:
             if 'max()' in e.args[0]:
                 max_edge_weight = 0
             else:
@@ -357,7 +357,7 @@ def compute_linked_significance(
     num_exceedances = 0
     p_value = None
 
-    for i in range(num_permutations):
+    for i in xrange(num_permutations):
         # If we're permitted to estimate the p-value, we will check
         # periodically to determine if we need to do the estimation.
         if use_estimation:
@@ -646,7 +646,7 @@ def compute_significance_for_pairs_edge_swap(
     #
     # Use this variable to track our progress.
     previous_percent_done = 0
-    for i in range(num_permutations):
+    for i in xrange(num_permutations):
         randomized_edges_graph = interactions_graph.randomize_by_edge_swaps(
                 num_edge_swap_events)
         for pair in pairs:
@@ -870,7 +870,7 @@ def calculate_and_output_results_edge_swap(
             score_correction
     )
     logger.info("Writing results to %s" % outfileh.name)
-    write_results_to_csv(csv_writer, iter(pair_statistics.items()))
+    write_results_to_csv(csv_writer, pair_statistics.iteritems())
 
 
 def main(argv=None):

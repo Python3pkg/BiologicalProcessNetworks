@@ -21,7 +21,7 @@ from convutils import convutils
 
 import bpn.cli
 import bpn.structures
-from .defaults import (
+from defaults import (
         SUPERDEBUG,
         SUPERDEBUG_MODE,
         LINKS_FIELDNAMES,
@@ -40,9 +40,9 @@ if SUPERDEBUG_MODE:
     logger.setLevel(SUPERDEBUG)
     #stream_handler.setLevel(SUPERDEBUG)
 
-from . import simulatedannealing
-from . import states
-from . import recorders
+import simulatedannealing
+import states
+import recorders
 
 def main(argv=None):
     cli_parser = bpn.cli.SaCli()

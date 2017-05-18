@@ -18,7 +18,7 @@ import bitarray
 import networkx
 import numpy
 
-from .mcmc.defaults import BROADCAST_PERCENT, SUPERDEBUG, SUPERDEBUG_MODE
+from mcmc.defaults import BROADCAST_PERCENT, SUPERDEBUG, SUPERDEBUG_MODE
 
 import logging
 logger = logging.getLogger('bpn.structures')
@@ -88,7 +88,7 @@ class InteractionGraph(networkx.Graph):
 
         annotations_to_remove = []
         # Remove any annotations lacking genes.
-        for annotation, genes in annotations_dict.items():
+        for annotation, genes in annotations_dict.iteritems():
             if not genes:
                 annotations_to_remove.append(annotation)
 
@@ -178,7 +178,7 @@ class EdgeSwapGraph(InteractionGraph):
         total_iterations = num_edges * num_iterations
         logger.debug("Swapping edges over %d events." % total_iterations)
 
-        for i in range(total_iterations):
+        for i in xrange(total_iterations):
             rand_index1 = int(round(random.random() * (num_edges - 1)))
             rand_index2 = int(round(random.random() * (num_edges - 1)))
             original_edge1 = edge_list[rand_index1]
@@ -269,7 +269,7 @@ def get_annotations_stats(annotations_dict):
     """
     num_total_annotations = 0
 
-    for annotated_genes in annotations_dict.values():
+    for annotated_genes in annotations_dict.itervalues():
         num_total_annotations += len(annotated_genes)
 
     stats = {
@@ -575,8 +575,7 @@ class Symmetrical2dArray(numpy.ndarray):
                 buffer=None, offset=0, strides=None, order=None)
 
 
-    def __setitem__(self, xxx_todo_changeme, value):
-        (i, j) = xxx_todo_changeme
+    def __setitem__(self, (i, j), value):
         numpy.ndarray.__setitem__(self, (i, j), value)
         numpy.ndarray.__setitem__(self, (j, i), value)
 
@@ -763,7 +762,7 @@ class AnnotatedInteractionsGraph(object):
         interactions.
 
         """
-        return list(self._coannotations_to_interactions.keys())
+        return self._coannotations_to_interactions.keys()
 
 
     def calc_num_terms(self):
@@ -891,12 +890,12 @@ class AnnotatedInteractionsGraph(object):
         """
         if greater:
             active_genes = set(gene for gene, vals in
-                    list(self._interactions_graph.node.items()) if
+                    self._interactions_graph.node.items() if
                     vals['weight'] >= cutoff
             )
         else:
             active_genes = set(gene for gene, vals in
-                    list(self._interactions_graph.node.items()) if
+                    self._interactions_graph.node.items() if
                     vals['weight'] <= cutoff
             )
         return active_genes
@@ -946,7 +945,7 @@ class AnnotatedInteractionsGraph(object):
 
         """
         return self._get_active_interactions(
-                list(range(len(self._interactions))),
+                range(len(self._interactions)),
                 cutoff,
                 greater
         )
@@ -1034,8 +1033,8 @@ class AnnotatedInteractionsArray(AnnotatedInteractionsGraph):
         # returned by dict.keys() and dict.values() correspond. See
         # http://docs.python.org/library/stdtypes.html#dict.items
         self._links, self._link_interactions = (
-                list(self._coannotations_to_interactions.keys()),
-                list(self._coannotations_to_interactions.values())
+                self._coannotations_to_interactions.keys(),
+                self._coannotations_to_interactions.values()
         )
         self._links_indices = dict((l, i) for (i, l) in
                 enumerate(self._links))
@@ -1125,8 +1124,8 @@ class AnnotatedInteractions2dArray(AnnotatedInteractionsGraph):
         self._map_terms_to_indices()
         # Get linearized lists of the links and their interactions.
         named_links, self._link_interactions = (
-                list(self._coannotations_to_interactions.keys()),
-                list(self._coannotations_to_interactions.values())
+                self._coannotations_to_interactions.keys(),
+                self._coannotations_to_interactions.values()
         )
 
         num_terms = len(self._annotation_terms)
@@ -1167,8 +1166,8 @@ class AnnotatedInteractions2dArray(AnnotatedInteractionsGraph):
         # We follow a similar pattern for the intraterm interactions.
         self._intraterm_indices = numpy.zeros(num_terms, int)
         named_terms, self._intraterm_interactions = (
-                list(self._intraterm_interactions.keys()),
-                list(self._intraterm_interactions.values())
+                self._intraterm_interactions.keys(),
+                self._intraterm_interactions.values()
         )
         self._intraterm_interactions.insert(0, None)
         # For each term that has intraterm interactions, we'll denote
@@ -1318,12 +1317,12 @@ class AnnotatedInteractions2dArray(AnnotatedInteractionsGraph):
         """
         if greater:
             active_genes_indices = [self._genes_to_indices[gene] for
-                    gene, vals in list(self._interactions_graph.node.items())
+                    gene, vals in self._interactions_graph.node.items()
                     if vals['weight'] >= cutoff
             ]
         else:
             active_genes_indices = [self._genes_to_indices[gene] for
-                    gene, vals in list(self._interactions_graph.node.items())
+                    gene, vals in self._interactions_graph.node.items()
                     if vals['weight'] <= cutoff
             ]
         return active_genes_indices
@@ -1361,8 +1360,8 @@ class AnnotatedInteractions2dArray(AnnotatedInteractionsGraph):
         # the nonzero of that, zipped so that the indices, returned by
         # nonzero as (X, Y), are returned instead as (x_1, y_1), (x_2,
         # y_2), etc.
-        valid_links = list(zip(
-                *numpy.triu(self._links_to_interactions).nonzero()))
+        valid_links = zip(
+                *numpy.triu(self._links_to_interactions).nonzero())
         return valid_links
 
 

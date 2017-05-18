@@ -11,13 +11,13 @@
 
 import math
 import random
-from . import states
-from . import recorders
+import states
+import recorders
 
 import logging
 logger = logging.getLogger('bpn.sabpn.simulatedannealing')
 
-from .defaults import NUM_STEPS, TEMPERATURE,  END_TEMPERATURE
+from defaults import NUM_STEPS, TEMPERATURE,  END_TEMPERATURE
 
 class SimulatedAnnealing(object):
     pass
@@ -129,13 +129,13 @@ class PLNSimulatedAnnealing(SimulatedAnnealing):
         if (log_delta_e > 0) or (
                 (-log_delta_e/self.temperature) > \
                 random.random()):
-            print("Accepted NEW")
+            print "Accepted NEW"
             self.current_state = proposed_state
             logger.debug("Accepted proposed state.")
             log_state_likelihood = proposed_log_likelihood
             accepted = True
         else:
-            print("Rejected State")
+            print "Rejected State"
             logger.debug("Rejected proposed state.")
             accepted = False
             log_state_likelihood = current_log_likelihood
@@ -165,7 +165,7 @@ class PLNSimulatedAnnealing(SimulatedAnnealing):
 
         """
         broadcast_percent_complete = 0
-        for i in range(self.num_steps*10):
+        for i in xrange(self.num_steps*10):
             logger.debug("Steps complete %d of %d" % (i + 1, 
                     self.num_steps))
             self.next_state()

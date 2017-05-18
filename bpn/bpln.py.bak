@@ -37,8 +37,8 @@ import math
 
 from convutils import convutils
 
-from . import cli
-from . import statstools
+import cli
+import statstools
 
 
 # Configure all the logging stuff

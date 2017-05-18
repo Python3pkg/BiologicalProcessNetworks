@@ -22,11 +22,11 @@ import sys
 import conflictsparse
 from convutils import convutils
 
-from . import cbpn
-from . import logconf
-from . import mcmc.defaults
-from . import parsers
-from . import structures
+import cbpn
+import logconf
+import mcmc.defaults
+import parsers
+import structures
 
 import logging
 logger = logging.getLogger('bpn.cli')
@@ -536,7 +536,7 @@ class BplnCli(object):
 
         """
         for term in selected_terms:
-            for other_term in annotations_dict.keys():
+            for other_term in annotations_dict.iterkeys():
                 if term != other_term:
                     yield term, other_term
                     yield other_term, term
@@ -544,7 +544,7 @@ class BplnCli(object):
 
     def make_all_possible_links(self, annotations_dict):
         num_links = len(annotations_dict) ** 2 - len(annotations_dict)
-        links = itertools.permutations(iter(annotations_dict.keys()), 2)
+        links = itertools.permutations(annotations_dict.iterkeys(), 2)
         return links, num_links
 
 
@@ -661,7 +661,7 @@ class BplnCli(object):
                 "interactions_graph and annotations_dict have unequal " \
                 "numbers of genes!"
 
-        for term, genes in self.annotations_dict.items():
+        for term, genes in self.annotations_dict.iteritems():
             assert len(genes) > 0, "%s has no genes!" % term
 
         interactions_file.close()

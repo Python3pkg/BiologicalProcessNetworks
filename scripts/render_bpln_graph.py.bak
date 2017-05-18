@@ -335,10 +335,10 @@ def build_universe_graph_from_edges(
     #universe_graph.edge_attr['weight'] = '20'
     universe_graph.node_attr['shape'] = 'box'
     #universe_graph.node_attr['fillcolor'] = 'white'
-    for edges in list(all_edges.values()):
-        universe_graph.add_edges_from(list(edges.keys()))
+    for edges in all_edges.values():
+        universe_graph.add_edges_from(edges.keys())
     if all_annotation_stats is not None:
-        for annotation, stats in all_annotation_stats.items():
+        for annotation, stats in all_annotation_stats.iteritems():
             node = universe_graph.get_node(annotation)
             node.attr['label'] = '%s' % annotation
             if print_annotation_stats:
@@ -389,7 +389,7 @@ def parse_set_significances(significances_fileh):
     """
     csv_reader = convutils.make_csv_reader(significances_fileh,
             headers=False)
-    next(csv_reader)
+    csv_reader.next()
     set_significances = {}
     for entry in csv_reader:
         significances = [(get_sign(value), abs(float(value))) for value
@@ -440,7 +440,7 @@ def make_specific_graph(
                     qvaluetocolor.UPREGULATED_HEX_CODES[:2]
                 ):
                 g_node.attr['fontcolor'] = 'white'
-    for edge, values in list(desired_edges.items()):
+    for edge, values in desired_edges.items():
         g_edge = graph.get_edge(*edge)
         g_edge.attr['style'] = 'solid'
         g_edge.attr['penwidth'] = '5.0'

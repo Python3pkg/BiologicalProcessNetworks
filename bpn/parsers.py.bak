@@ -13,13 +13,13 @@ import itertools
 
 from convutils import convstructs, convutils
 
-from . import structures
+import structures
 
 import logging
 logger = logging.getLogger('bpn.parsers')
 
 
-class DuplicateIDError(Exception):
+class DuplicateIDError(StandardError):
     """Error raised if a gene (product) ID is encountered more than
     once.
 
